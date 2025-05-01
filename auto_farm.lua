@@ -14,16 +14,16 @@ local mainFrame
 -- Functions
 
 function startAntiAFK()
-    spawn(function()
-        while antiAFKEnabled do
-            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-            if hrp then
-                hrp.CFrame = hrp.CFrame * CFrame.new(0, 0, math.random(-1, 1))
-            end
-            wait(2)
+    local virtualUser = game:GetService("VirtualUser")
+    game:GetService("Players").LocalPlayer.Idled:Connect(function()
+        if antiAFKEnabled then
+            virtualUser:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+            wait(1)
+            virtualUser:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
         end
     end)
 end
+
 
 function enableNoclip(character)
     for _, part in pairs(character:GetChildren()) do
